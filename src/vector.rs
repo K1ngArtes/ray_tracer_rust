@@ -10,15 +10,19 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
-    fn length(self) -> f64 {
+    pub fn new(x: f64, y: f64, z: f64) -> Vec3 {
+        Vec3{x, y, z}
+    }
+
+    pub fn length(self) -> f64 {
         self.length_squared().sqrt()
     }
 
-    fn length_squared(self) -> f64 {
+    pub fn length_squared(self) -> f64 {
         self.x*self.x + self.y*self.y + self.z*self.z
     }
 
-    fn dot(self, rhs: Vec3) -> Vec3 {
+    pub fn dot(self, rhs: Vec3) -> Vec3 {
         Vec3 {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
@@ -26,7 +30,7 @@ impl Vec3 {
         }
     }
 
-    fn cross(self, rhs: Vec3) -> Vec3 {
+    pub fn cross(self, rhs: Vec3) -> Vec3 {
         Vec3 {
             x: (self.y * rhs.z) - (self.z * rhs.y),
             y: (self.z * rhs.x) - (self.x * rhs.z),
@@ -34,7 +38,7 @@ impl Vec3 {
         }
     }
 
-    fn unit_vector(self) -> Vec3 {
+    pub fn unit_vector(self) -> Vec3 {
         self / self.length()
     }
 }
