@@ -1,5 +1,5 @@
 use core::ops;
-use std::ops::Neg;
+use std::ops::{Neg, Mul};
 
 fn main() {
     let image_width = 256;
@@ -73,6 +73,30 @@ impl ops::Neg for Vec3 {
     }
 }
 
+impl ops::Mul<f64> for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Vec3{
+            x: self.x * rhs,
+            y: self.y * rhs,
+            z: self.z * rhs,
+        }
+    }
+}
+
+impl ops::Mul<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: Vec3) -> Self::Output {
+        Vec3{
+            x: rhs.x * self,
+            y: rhs.y * self,
+            z: rhs.z * self,
+        }
+    }
+}
+
 #[test]
 fn add_vec3_test() {
     let v1 = Vec3{x:1.0, y:2.0, z:3.0};
@@ -100,4 +124,13 @@ fn neg_vec3_test() {
     let v3 = -v1;
 
     assert_eq!(Vec3{x:-1.0, y:-2.0, z:-3.0}, v3);
+}
+
+#[test]
+fn mul_vec3_test() {
+    let v1 = Vec3{x:1.0, y:2.0, z:3.0};
+
+    let v3 = 3.0 * v1;
+
+    assert_eq!(Vec3{x:3.0, y:6.0, z:9.0}, v3);
 }
