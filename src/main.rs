@@ -17,15 +17,19 @@ fn main() {
             let g: f64 = col as f64 / (image_height - 1) as f64;
             let b: f64 = 0.25;
 
-            let ir: i32 = (255.999 * r) as i32;
-            let ig: i32 = (255.999 * g) as i32;
-            let ib: i32 = (255.999 * b) as i32;
-
-            println!("{} {} {}", ir, ig, ib);
+            write_color(Vec3{x: r, y: g, z: b});
         }
         row -= 1;
         eprintln!("Done");
     }
+}
+
+fn write_color(pixel_color: Color) {
+    let ir: i32 = (255.999 * pixel_color.x) as i32;
+    let ig: i32 = (255.999 * pixel_color.y) as i32;
+    let ib: i32 = (255.999 * pixel_color.z) as i32;
+
+    println!("{} {} {}", ir, ig, ib);
 }
 
 #[derive(PartialEq)]
