@@ -1,7 +1,7 @@
 use core::ops;
 
 mod vector;
-use vector::{Vec3, Color};
+use vector::{Vec3, Color, Point3};
 
 fn main() {
     let image_width = 256;
@@ -34,3 +34,15 @@ fn write_color(pixel_color: Color) {
 
     println!("{} {} {}", ir, ig, ib);
 }
+
+struct Ray {
+    orig: Point3,
+    dir: Vec3,
+}
+
+impl Ray {
+    fn at(&self, t: f64) -> Point3 {
+        self.orig + self.dir*t
+    }
+}
+
