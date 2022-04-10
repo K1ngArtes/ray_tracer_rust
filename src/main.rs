@@ -1,4 +1,5 @@
 use core::ops;
+use std::ops::Neg;
 
 fn main() {
     let image_width = 256;
@@ -40,7 +41,7 @@ impl ops::Add<Vec3> for Vec3 {
     type Output = Vec3;
 
     fn add(self, rhs: Vec3) -> Self::Output {
-        return Vec3 {
+        Vec3 {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
             z: self.z + rhs.z,
@@ -52,10 +53,22 @@ impl ops::Sub<Vec3> for Vec3 {
     type Output = Vec3;
 
     fn sub(self, rhs: Vec3) -> Self::Output {
-        return Vec3 {
+        Vec3 {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
             z: self.z - rhs.z,
+        }
+    }
+}
+
+impl ops::Neg for Vec3 {
+    type Output = Vec3;
+
+    fn neg(self) -> Self::Output {
+        Vec3{
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
         }
     }
 }
@@ -78,4 +91,13 @@ fn sub_vec3_test() {
     let v3 = v1 - v2;
 
     assert_eq!(Vec3{x:-3.0, y:-3.0, z:-3.0}, v3);
+}
+
+#[test]
+fn neg_vec3_test() {
+    let v1 = Vec3{x:1.0, y:2.0, z:3.0};
+
+    let v3 = -v1;
+
+    assert_eq!(Vec3{x:-1.0, y:-2.0, z:-3.0}, v3);
 }
