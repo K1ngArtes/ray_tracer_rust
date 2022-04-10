@@ -1,5 +1,4 @@
 use core::ops;
-use std::ops::{Neg, Mul, Div};
 
 fn main() {
     let image_width = 256;
@@ -47,6 +46,16 @@ impl ops::Add<Vec3> for Vec3 {
             y: self.y + rhs.y,
             z: self.z + rhs.z,
         }
+    }
+}
+
+impl Vec3 {
+    fn length(&self) -> f64 {
+        self.length_squared().sqrt()
+    }
+
+    fn length_squared(&self) -> f64 {
+        self.x*self.x + self.y*self.y + self.z*self.z
     }
 }
 
@@ -156,3 +165,11 @@ fn div_vec3_test() {
 
     assert_eq!(Vec3{x:v1.x / 3.0, y:v1.y / 3.0, z:v1.z / 3.0}, v3);
 }
+
+#[test]
+fn vec3_length_test() {
+    let v1 = Vec3{x:1.0, y:2.0, z:3.0};
+
+    assert_eq!(3.7416573867739413, v1.length());
+}
+
