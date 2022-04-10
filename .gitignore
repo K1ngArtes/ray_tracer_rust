@@ -2,3 +2,6 @@
 
 # Ignore idea
 /.idea
+
+# Ignore output folder
+/out
