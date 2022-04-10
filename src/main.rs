@@ -61,6 +61,10 @@ impl Vec3 {
             z: (self.x * rhs.y) - (self.y * rhs.x),
         }
     }
+
+    fn unit_vector(self) -> Vec3 {
+        self / self.length()
+    }
 }
 
 type Point3 = Vec3;
