@@ -59,6 +59,9 @@ impl Vec3 {
     }
 }
 
+type Point3 = Vec3;
+type Color = Vec3;
+
 impl ops::Sub<Vec3> for Vec3 {
     type Output = Vec3;
 
