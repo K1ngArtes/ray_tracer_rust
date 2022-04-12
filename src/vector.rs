@@ -20,12 +20,8 @@ impl Vec3 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
-    pub fn dot(self, rhs: Vec3) -> Vec3 {
-        Vec3 {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-            z: self.z + rhs.z,
-        }
+    pub fn dot(self, rhs: Vec3) -> f64 {
+        return self.x * rhs.x + self.y * rhs.y + self.z * rhs.z;
     }
 
     pub fn cross(self, rhs: Vec3) -> Vec3 {
@@ -250,18 +246,9 @@ fn vec3_dot_test() {
         z: 6.0,
     };
 
-    let v3 = v1.dot(v2);
-    let v4 = v2.dot(v1);
+    let dot_result = v1.dot(v2);
 
-    assert_eq!(v3, v4);
-    assert_eq!(
-        Vec3 {
-            x: v1.x + v2.x,
-            y: v1.y + v2.y,
-            z: v1.z + v2.z
-        },
-        v3
-    );
+    assert_eq!(32.0, dot_result);
 }
 
 #[test]
