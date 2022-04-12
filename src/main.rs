@@ -71,7 +71,7 @@ fn ray_color(ray: Ray) -> Color {
     let t = hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, &ray);
     if t > 0.0 {
         let normal = ray.at(t) - Vec3::new(0.0, 0.0, -1.0);
-        return 0.5 * Color::new(normal.x+1.0, normal.y+1.0, normal.z+1.0);
+        return 0.5 * Color::new(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0);
     }
 
     let unit_direction = ray.dir.unit_vector();
@@ -85,11 +85,11 @@ fn hit_sphere(center: &Point3, radius: f64, ray: &Ray) -> f64 {
     let oc = ray.orig - *center;
     let a = ray.dir.dot(ray.dir);
     let b = 2.0 * oc.dot(ray.dir);
-    let c = oc.dot(oc) - radius*radius;
-    let discriminant = b*b - 4.0*a*c;
+    let c = oc.dot(oc) - radius * radius;
+    let discriminant = b * b - 4.0 * a * c;
     return if discriminant < 0.0 {
         -1.0
     } else {
         (-b - discriminant.sqrt()) / (2.0 * a)
-    }
+    };
 }
