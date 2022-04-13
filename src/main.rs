@@ -66,7 +66,10 @@ impl Ray {
 }
 
 fn ray_color(ray: Ray) -> Color {
-    let sphere = Sphere{radius: 0.5, center: Point3::new(0.0, 0.0, -1.0)};
+    let sphere = Sphere {
+        radius: 0.5,
+        center: Point3::new(0.0, 0.0, -1.0),
+    };
 
     let mut hit_record: HitRecord = HitRecord::default();
     if sphere.hit(&ray, 0.000001, 1000.0, &mut hit_record) {
@@ -97,7 +100,7 @@ struct Sphere {
 }
 
 impl Hittable for Sphere {
-    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit_record: &mut HitRecord) -> bool{
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit_record: &mut HitRecord) -> bool {
         let oc = ray.orig - self.center;
         let a = ray.dir.length_squared();
         let half_b = oc.dot(ray.dir);
