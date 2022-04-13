@@ -66,10 +66,12 @@ impl Ray {
 }
 
 fn ray_color(ray: Ray) -> Color {
-    let t = hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, &ray);
-    if t > 0.0 {
-        let normal = ray.at(t) - Vec3::new(0.0, 0.0, -1.0);
-        return 0.5 * Color::new(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0);
+    let sphere = Sphere{radius: 0.5, center: Point3::new(0.0, 0.0, -1.0)};
+
+    let mut hit_record: HitRecord = HitRecord::default();
+    if sphere.hit(&ray, 0.000001, 1000.0, &mut hit_record) {
+        let hit_normal = hit_record.normal;
+        return 0.5 * Color::new(hit_normal.x + 1.0, hit_normal.y + 1.0, hit_normal.z + 1.0);
     }
 
     let unit_direction = ray.dir.unit_vector();
@@ -78,16 +80,47 @@ fn ray_color(ray: Ray) -> Color {
     (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0)
 }
 
-// 𝑡2𝐛⋅𝐛+2𝑡𝐛⋅(𝐀−𝐂)+(𝐀−𝐂)⋅(𝐀−𝐂)−𝑟2=0
-fn hit_sphere(center: &Point3, radius: f64, ray: &Ray) -> f64 {
-    let oc = ray.orig - *center;
-    let a = ray.dir.length_squared();
-    let half_b = oc.dot(ray.dir);
-    let c = oc.length_squared() - radius * radius;
-    let discriminant = half_b * half_b - a * c;
-    return if discriminant < 0.0 {
-        -1.0
-    } else {
-        (-half_b - discriminant.sqrt()) / a
-    };
+#[derive(Default)]
+struct HitRecord {
+    p: Point3,
+    normal: Vec3,
+    t: f64,
+}
+
+trait Hittable {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit_record: &mut HitRecord) -> bool;
+}
+
+struct Sphere {
+    center: Point3,
+    radius: f64,
+}
+
+impl Hittable for Sphere {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit_record: &mut HitRecord) -> bool{
+        let oc = ray.orig - self.center;
+        let a = ray.dir.length_squared();
+        let half_b = oc.dot(ray.dir);
+        let c = oc.length_squared() - self.radius * self.radius;
+
+        let discriminant: f64 = half_b * half_b - a * c;
+        if discriminant < 0.0 {
+            return false;
+        }
+        let sqrtd = discriminant.sqrt();
+
+        let mut root = (-half_b - sqrtd) / a;
+        if root < t_min || root > t_max {
+            root = (-half_b - discriminant.sqrt()) / a;
+            if root < t_min || root > t_max {
+                return false;
+            }
+        }
+
+        hit_record.t = root;
+        hit_record.p = ray.at(hit_record.t);
+        hit_record.normal = (hit_record.p - self.center) / self.radius;
+
+        true
+    }
 }
