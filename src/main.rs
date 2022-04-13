@@ -1,5 +1,3 @@
-use core::ops;
-
 mod vector;
 use vector::{Color, Point3, Vec3};
 
@@ -83,13 +81,13 @@ fn ray_color(ray: Ray) -> Color {
 // 𝑡2𝐛⋅𝐛+2𝑡𝐛⋅(𝐀−𝐂)+(𝐀−𝐂)⋅(𝐀−𝐂)−𝑟2=0
 fn hit_sphere(center: &Point3, radius: f64, ray: &Ray) -> f64 {
     let oc = ray.orig - *center;
-    let a = ray.dir.dot(ray.dir);
-    let b = 2.0 * oc.dot(ray.dir);
-    let c = oc.dot(oc) - radius * radius;
-    let discriminant = b * b - 4.0 * a * c;
+    let a = ray.dir.length_squared();
+    let half_b = oc.dot(ray.dir);
+    let c = oc.length_squared() - radius * radius;
+    let discriminant = half_b * half_b - a * c;
     return if discriminant < 0.0 {
         -1.0
     } else {
-        (-b - discriminant.sqrt()) / (2.0 * a)
+        (-half_b - discriminant.sqrt()) / a
     };
 }
