@@ -133,6 +133,10 @@ impl Hittable for Sphere {
 impl HitRecord {
     fn set_face_normal(&mut self, ray: &Ray, outward_normal: &Vec3) {
         self.is_front_face = ray.dir.dot(*outward_normal) < 0.0;
-        self.normal = if self.is_front_face {*outward_normal} else {-*outward_normal};
+        self.normal = if self.is_front_face {
+            *outward_normal
+        } else {
+            -*outward_normal
+        };
     }
 }
