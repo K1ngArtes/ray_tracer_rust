@@ -1,5 +1,5 @@
-use crate::vector::{Point3, Vec3};
 use crate::ray::Ray;
+use crate::vector::{Point3, Vec3};
 
 #[derive(Default)]
 pub struct HitRecord {

@@ -1,5 +1,5 @@
+use crate::hittable::{HitRecord, Hittable, Sphere};
 use crate::vector::{Color, Point3, Vec3};
-use crate::hittable::{HitRecord, Sphere, Hittable};
 
 pub struct Ray {
     pub orig: Point3,

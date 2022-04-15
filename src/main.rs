@@ -1,9 +1,9 @@
-mod vector;
 mod hittable;
 mod ray;
+mod vector;
 
-use vector::{Color, Point3, Vec3};
 use ray::Ray;
+use vector::{Color, Point3, Vec3};
 
 fn main() {
     // Image
