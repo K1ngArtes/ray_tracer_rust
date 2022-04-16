@@ -2,6 +2,7 @@ mod hittable;
 mod ray;
 mod vector;
 
+use crate::hittable::{Hittable, HittableList, Sphere};
 use ray::Ray;
 use vector::{Color, Point3, Vec3};
 
@@ -26,6 +27,14 @@ fn main() {
     println!("{} {}", image_width, image_height);
     println!("255");
 
+    // List of hittable objects
+    let sphere = Sphere {
+        radius: 0.5,
+        center: Point3::new(0.0, 0.0, -1.0),
+    };
+    let hit_vec: Vec<Box<dyn Hittable>> = vec![Box::new(sphere)];
+    let hittables = HittableList { objects: hit_vec };
+
     // Pixels are written from left to right, top to bottom
     let mut row = image_height - 1;
     while row >= 0 {
@@ -37,7 +46,7 @@ fn main() {
                 origin,
                 lower_left_corner + u * horizontal + v * vertical - origin,
             );
-            let pixel_color = ray::ray_color(r);
+            let pixel_color = ray::ray_color(r, &hittables);
 
             write_color(pixel_color);
         }

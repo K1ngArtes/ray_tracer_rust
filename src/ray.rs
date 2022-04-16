@@ -1,4 +1,4 @@
-use crate::hittable::{HitRecord, Hittable, HittableList, Sphere};
+use crate::hittable::{HitRecord, Hittable, HittableList};
 use crate::vector::{Color, Point3, Vec3};
 
 pub struct Ray {
@@ -16,14 +16,7 @@ impl Ray {
     }
 }
 
-pub fn ray_color(ray: Ray) -> Color {
-    let sphere = Sphere {
-        radius: 0.5,
-        center: Point3::new(0.0, 0.0, -1.0),
-    };
-    let hit_vec: Vec<Box<dyn Hittable>> = vec![Box::new(sphere)];
-    let hittables = HittableList { objects: hit_vec };
-
+pub fn ray_color(ray: Ray, hittables: &HittableList) -> Color {
     let mut hit_record: HitRecord = HitRecord::default();
     if hittables.hit(&ray, 0.000001, 1000.0, &mut hit_record) {
         let hit_normal = hit_record.normal;
