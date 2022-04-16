@@ -1,7 +1,7 @@
 mod hittable;
 mod ray;
-mod vector;
 mod util;
+mod vector;
 
 use crate::hittable::{Hittable, HittableList, Sphere};
 use ray::Ray;
