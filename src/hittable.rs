@@ -60,7 +60,7 @@ impl HitRecord {
 }
 
 pub struct HittableList {
-    pub objects: Vec<Box<dyn Hittable>>
+    pub objects: Vec<Box<dyn Hittable>>,
 }
 
 impl Hittable for HittableList {
