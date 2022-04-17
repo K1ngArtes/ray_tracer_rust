@@ -8,7 +8,7 @@ use ray::Ray;
 use vector::{Color, Point3, Vec3};
 
 use std::fs::File;
-use std::io::{BufReader, BufRead, Error};
+use std::io::{BufRead, BufReader, Error};
 
 fn main() {
     let world: HittableList = load_world_file().unwrap();
@@ -91,7 +91,9 @@ fn load_world_file() -> Result<HittableList, Error> {
     let input = File::open(path)?;
     let buffered = BufReader::new(input);
 
-    let mut world = HittableList{objects: Vec::new()};
+    let mut world = HittableList {
+        objects: Vec::new(),
+    };
     let mut is_radius = true;
     let mut radius = 0.0;
     for line in buffered.lines() {
@@ -103,12 +105,9 @@ fn load_world_file() -> Result<HittableList, Error> {
             let center = Point3::new(
                 point3_values[0].parse().unwrap(),
                 point3_values[1].parse().unwrap(),
-                point3_values[2].parse().unwrap()
+                point3_values[2].parse().unwrap(),
             );
-            let sphere = Sphere {
-                radius,
-                center,
-            };
+            let sphere = Sphere { radius, center };
             world.objects.push(Box::new(sphere));
         }
         is_radius = !is_radius;
