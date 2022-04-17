@@ -24,12 +24,12 @@ fn main() {
         radius: 0.5,
         center: Point3::new(0.0, 0.0, -1.0),
     };
-    let mut sphere2 = Sphere {
+    let sphere2 = Sphere {
         radius: 100.0,
         center: Point3::new(0.0, -100.5, -1.0),
     };
     let hit_vec: Vec<Box<dyn Hittable>> = vec![Box::new(sphere), Box::new(sphere2)];
-    let mut world = HittableList { objects: hit_vec };
+    let world = HittableList { objects: hit_vec };
 
     // Pixels are written from left to right, top to bottom
     let mut row = image_height - 1;
