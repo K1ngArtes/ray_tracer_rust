@@ -3,11 +3,16 @@ mod ray;
 mod util;
 mod vector;
 
-use crate::hittable::{Hittable, HittableList, Sphere};
+use crate::hittable::{HittableList, Sphere};
 use ray::Ray;
 use vector::{Color, Point3, Vec3};
 
+use std::fs::File;
+use std::io::{BufReader, BufRead, Error};
+
 fn main() {
+    let world: HittableList = load_world_file().unwrap();
+
     // Image
     let aspect_ratio = 16.0 / 9.0;
     let image_width = 800;
@@ -18,18 +23,6 @@ fn main() {
     println!("P3");
     println!("{} {}", image_width, image_height);
     println!("255");
-
-    // List of hittable objects
-    let sphere = Sphere {
-        radius: 0.5,
-        center: Point3::new(0.0, 0.0, -1.0),
-    };
-    let sphere2 = Sphere {
-        radius: 100.0,
-        center: Point3::new(0.0, -100.5, -1.0),
-    };
-    let hit_vec: Vec<Box<dyn Hittable>> = vec![Box::new(sphere), Box::new(sphere2)];
-    let world = HittableList { objects: hit_vec };
 
     // Pixels are written from left to right, top to bottom
     let mut row = image_height - 1;
@@ -90,4 +83,36 @@ impl Camera {
             self.lower_left_corner + u * self.horizontal + v * self.vertical - self.origin,
         )
     }
+}
+
+fn load_world_file() -> Result<HittableList, Error> {
+    let path = "world.txt";
+
+    let input = File::open(path)?;
+    let buffered = BufReader::new(input);
+
+    let mut world = HittableList{objects: Vec::new()};
+    let mut is_radius = true;
+    let mut radius = 0.0;
+    for line in buffered.lines() {
+        if is_radius {
+            radius = line?.parse().unwrap();
+        } else {
+            let the_line = line?;
+            let point3_values: Vec<&str> = the_line.split(' ').to_owned().collect();
+            let center = Point3::new(
+                point3_values[0].parse().unwrap(),
+                point3_values[1].parse().unwrap(),
+                point3_values[2].parse().unwrap()
+            );
+            let sphere = Sphere {
+                radius,
+                center,
+            };
+            world.objects.push(Box::new(sphere));
+        }
+        is_radius = !is_radius;
+    }
+
+    Ok(world)
 }
