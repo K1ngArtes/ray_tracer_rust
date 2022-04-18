@@ -12,6 +12,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
 static SAMPLES_PER_PIXEL: i32 = 10;
+static MAX_DEPTH: i32 = 50;
 
 fn main() {
     let world: HittableList = load_world_file().unwrap();
@@ -38,7 +39,7 @@ fn main() {
                 let u = (col as f64 + util::random_double()) / (image_width as f64 - 1.0);
                 let v = (row as f64 + util::random_double()) / (image_height as f64 - 1.0);
                 let new_ray = camera.ray(u, v);
-                pixel_color = pixel_color + ray_color(new_ray, &world);
+                pixel_color = pixel_color + ray_color(new_ray, &world, MAX_DEPTH);
             }
             write_color(pixel_color, SAMPLES_PER_PIXEL);
         }

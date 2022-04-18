@@ -1,4 +1,5 @@
 use std::ops;
+use crate::util;
 
 #[derive(PartialEq, Debug, Copy, Clone, Default)]
 pub struct Vec3 {
@@ -34,6 +35,32 @@ impl Vec3 {
 
     pub fn unit_vector(self) -> Vec3 {
         self / self.length()
+    }
+
+    pub fn random() -> Vec3 {
+        Vec3 {
+            x: util::random_double(),
+            y: util::random_double(),
+            z: util::random_double(),
+        }
+    }
+
+    pub fn random_with_limit(min: f64, max: f64) -> Vec3 {
+        Vec3 {
+            x: util::random_double_rng(min, max),
+            y: util::random_double_rng(min, max),
+            z: util::random_double_rng(min, max),
+        }
+    }
+
+    pub fn random_in_unit_sphere() -> Vec3 {
+        loop {
+            let p = Vec3::random_with_limit(-1.0, 1.0);
+            if p.length_squared() >= 1.0 {
+                continue;
+            }
+            return p;
+        }
     }
 }
 

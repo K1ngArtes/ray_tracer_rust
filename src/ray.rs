@@ -1,5 +1,6 @@
 use crate::hittable::{HitRecord, Hittable, HittableList};
 use crate::vector::{Color, Point3, Vec3};
+use crate::util;
 
 pub struct Ray {
     pub orig: Point3,
@@ -16,11 +17,15 @@ impl Ray {
     }
 }
 
-pub fn ray_color(ray: Ray, hittables: &HittableList) -> Color {
+pub fn ray_color(ray: Ray, world: &HittableList, depth: i32) -> Color {
+    if depth <= 0 {
+        return Color::default();
+    }
+
     let mut hit_record: HitRecord = HitRecord::default();
-    if hittables.hit(&ray, 0.000001, 1000.0, &mut hit_record) {
-        let hit_normal = hit_record.normal;
-        return 0.5 * Color::new(hit_normal.x + 1.0, hit_normal.y + 1.0, hit_normal.z + 1.0);
+    if world.hit(&ray, 0.0, util::INFINITY, &mut hit_record) {
+        let target = hit_record.p + hit_record.normal + Vec3::random_in_unit_sphere();
+        return 0.5 * ray_color(Ray::new(hit_record.p, target - hit_record.p), world, depth-1);
     }
 
     let unit_direction = ray.dir.unit_vector();
