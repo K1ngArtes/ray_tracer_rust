@@ -1,5 +1,5 @@
-use std::ops;
 use crate::util;
+use std::ops;
 
 #[derive(PartialEq, Debug, Copy, Clone, Default)]
 pub struct Vec3 {
