@@ -7,11 +7,11 @@ use crate::hittable::{HittableList, Sphere};
 use ray::Ray;
 use vector::{Color, Point3, Vec3};
 
+use crate::ray::ray_color;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
-use crate::ray::ray_color;
 
-static SAMPLES_PER_PIXEL : i32 = 10;
+static SAMPLES_PER_PIXEL: i32 = 10;
 
 fn main() {
     let world: HittableList = load_world_file().unwrap();
