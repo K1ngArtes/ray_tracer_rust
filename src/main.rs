@@ -9,6 +9,9 @@ use vector::{Color, Point3, Vec3};
 
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
+use crate::ray::ray_color;
+
+static SAMPLES_PER_PIXEL : i32 = 10;
 
 fn main() {
     let world: HittableList = load_world_file().unwrap();
@@ -29,24 +32,37 @@ fn main() {
     while row >= 0 {
         // eprintln!("Scanlines remaining: {}", row);
         for col in 0..image_width {
-            let u = (col as f64) / (image_width as f64 - 1.0);
-            let v = (row as f64) / (image_height as f64 - 1.0);
-            let r = camera.ray(u, v);
-            let pixel_color = ray::ray_color(r, &world);
+            let mut pixel_color = Color::default();
 
-            write_color(pixel_color);
+            for _ in 0..SAMPLES_PER_PIXEL {
+                let u = (col as f64 + util::random_double()) / (image_width as f64 - 1.0);
+                let v = (row as f64 + util::random_double()) / (image_height as f64 - 1.0);
+                let new_ray = camera.ray(u, v);
+                pixel_color = pixel_color + ray_color(new_ray, &world);
+            }
+            write_color(pixel_color, SAMPLES_PER_PIXEL);
         }
         row -= 1;
         // eprintln!("Done");
     }
 }
 
-fn write_color(pixel_color: Color) {
-    let ir: i32 = (255.999 * pixel_color.x) as i32;
-    let ig: i32 = (255.999 * pixel_color.y) as i32;
-    let ib: i32 = (255.999 * pixel_color.z) as i32;
+fn write_color(pixel_color: Color, samples_per_pixel: i32) {
+    let mut ir = pixel_color.x;
+    let mut ig = pixel_color.y;
+    let mut ib = pixel_color.z;
 
-    println!("{} {} {}", ir, ig, ib);
+    let scale = 1.0 / samples_per_pixel as f64;
+    ir *= scale;
+    ig *= scale;
+    ib *= scale;
+
+    println!(
+        "{} {} {}",
+        (256.0 * util::clamp(ir, 0.0, 0.999)) as i32,
+        (256.0 * util::clamp(ig, 0.0, 0.999)) as i32,
+        (256.0 * util::clamp(ib, 0.0, 0.999)) as i32
+    );
 }
 
 struct Camera {
