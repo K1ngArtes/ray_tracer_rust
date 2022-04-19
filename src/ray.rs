@@ -24,7 +24,7 @@ pub fn ray_color(ray: Ray, world: &HittableList, depth: i32) -> Color {
 
     let mut hit_record: HitRecord = HitRecord::default();
     if world.hit(&ray, 0.001, util::INFINITY, &mut hit_record) {
-        let target = hit_record.p + hit_record.normal + Vec3::random_in_unit_sphere();
+        let target = hit_record.p + hit_record.normal + Vec3::random_unit_vector();
         return 0.5
             * ray_color(
                 Ray::new(hit_record.p, target - hit_record.p),

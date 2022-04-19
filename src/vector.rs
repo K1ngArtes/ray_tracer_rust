@@ -62,6 +62,10 @@ impl Vec3 {
             return p;
         }
     }
+
+    pub fn random_unit_vector() -> Vec3 {
+        return Vec3::random_in_unit_sphere().unit_vector();
+    }
 }
 
 pub type Point3 = Vec3;
