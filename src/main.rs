@@ -53,10 +53,11 @@ fn write_color(pixel_color: Color, samples_per_pixel: i32) {
     let mut ig = pixel_color.y;
     let mut ib = pixel_color.z;
 
+    // Divide the color by the number of samples and gamma-correct for gamma=2.0.
     let scale = 1.0 / samples_per_pixel as f64;
-    ir *= scale;
-    ig *= scale;
-    ib *= scale;
+    ir = f64::sqrt(ir * scale);
+    ig = f64::sqrt(ig * scale);
+    ib = f64::sqrt(ib * scale);
 
     println!(
         "{} {} {}",
