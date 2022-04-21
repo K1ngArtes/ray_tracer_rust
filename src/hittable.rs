@@ -1,8 +1,8 @@
+use crate::material::{DiffuseMaterial, Material};
 use crate::ray::Ray;
 use crate::vector::{Point3, Vec3};
-use crate::material::{Material, DiffuseMaterial};
-use std::sync::Arc;
 use std::rc::Rc;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct HitRecord {
@@ -16,7 +16,7 @@ pub struct HitRecord {
 impl Default for HitRecord {
     fn default() -> HitRecord {
         HitRecord {
-            material: Box::new(DiffuseMaterial{}),
+            material: Box::new(DiffuseMaterial {}),
             ..Default::default()
         }
     }
