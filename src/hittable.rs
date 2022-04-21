@@ -1,12 +1,25 @@
 use crate::ray::Ray;
 use crate::vector::{Point3, Vec3};
+use crate::material::{Material, DiffuseMaterial};
+use std::sync::Arc;
+use std::rc::Rc;
 
-#[derive(Default, Clone)]
+#[derive(Clone)]
 pub struct HitRecord {
     pub p: Point3,
     pub normal: Vec3,
+    pub material: Box<dyn Material>,
     pub t: f64,
     pub is_front_face: bool,
+}
+
+impl Default for HitRecord {
+    fn default() -> HitRecord {
+        HitRecord {
+            material: Box::new(DiffuseMaterial{}),
+            ..Default::default()
+        }
+    }
 }
 
 pub trait Hittable {

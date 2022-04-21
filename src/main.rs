@@ -2,6 +2,7 @@ mod hittable;
 mod ray;
 mod util;
 mod vector;
+mod material;
 
 use crate::hittable::{HittableList, Sphere};
 use ray::Ray;
