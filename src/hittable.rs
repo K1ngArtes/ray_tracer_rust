@@ -1,26 +1,18 @@
-use crate::material::{DiffuseMaterial, Material};
+use crate::material::MaterialEnum;
 use crate::ray::Ray;
 use crate::vector::{Point3, Vec3};
 use std::rc::Rc;
 use std::sync::Arc;
 
-#[derive(Clone)]
+#[derive(Default, Clone)]
 pub struct HitRecord {
     pub p: Point3,
     pub normal: Vec3,
-    pub material: Box<dyn Material>,
+    pub material: MaterialEnum,
     pub t: f64,
     pub is_front_face: bool,
 }
 
-impl Default for HitRecord {
-    fn default() -> HitRecord {
-        HitRecord {
-            material: Box::new(DiffuseMaterial {}),
-            ..Default::default()
-        }
-    }
-}
 
 pub trait Hittable {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit_record: &mut HitRecord) -> bool;
