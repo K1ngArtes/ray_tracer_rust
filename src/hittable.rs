@@ -1,8 +1,6 @@
 use crate::material::MaterialEnum;
 use crate::ray::Ray;
 use crate::vector::{Point3, Vec3};
-use std::rc::Rc;
-use std::sync::Arc;
 
 #[derive(Default, Clone)]
 pub struct HitRecord {
@@ -12,7 +10,6 @@ pub struct HitRecord {
     pub t: f64,
     pub is_front_face: bool,
 }
-
 
 pub trait Hittable {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit_record: &mut HitRecord) -> bool;

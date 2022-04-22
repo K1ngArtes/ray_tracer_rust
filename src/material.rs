@@ -1,23 +1,25 @@
-use crate::hittable::{HitRecord, Hittable, HittableList};
+use crate::hittable::HitRecord;
 use crate::ray::Ray;
-use crate::vector::{Color, Point3, Vec3};
+use crate::vector::Color;
 
 #[derive(Clone)]
 pub enum MaterialEnum {
-    Diffuse
+    Diffuse,
 }
 
 impl Default for MaterialEnum {
-    fn default() -> Self { MaterialEnum::Diffuse }
+    fn default() -> Self {
+        MaterialEnum::Diffuse
+    }
 }
 
 impl MaterialEnum {
     pub fn scatter(
         &self,
-        r_in: &Ray,
-        hit_record: &HitRecord,
-        attenuation: &Color,
-        scattered: &Ray,
+        _r_in: &Ray,
+        _hit_record: &HitRecord,
+        _attenuation: &Color,
+        _scattered: &Ray,
     ) -> bool {
         todo!()
     }
