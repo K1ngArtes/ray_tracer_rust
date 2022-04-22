@@ -18,6 +18,7 @@ pub trait Hittable {
 pub struct Sphere {
     pub center: Point3,
     pub radius: f64,
+    pub material: MaterialEnum,
 }
 
 impl Hittable for Sphere {
