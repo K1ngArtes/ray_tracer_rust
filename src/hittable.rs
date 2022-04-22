@@ -21,6 +21,16 @@ pub struct Sphere {
     pub material: MaterialEnum,
 }
 
+impl Default for Sphere {
+    fn default() -> Self {
+        Sphere {
+            center: Vec3{x: 0.0, y: 0.0, z: -1.0},
+            radius: 0.5,
+            material: MaterialEnum::Diffuse,
+        }
+    }
+}
+
 impl Hittable for Sphere {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit_record: &mut HitRecord) -> bool {
         let oc = ray.orig - self.center;
