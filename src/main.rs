@@ -127,7 +127,7 @@ fn load_world_file() -> Result<HittableList, Error> {
                 point3_values[1].parse().unwrap(),
                 point3_values[2].parse().unwrap(),
             );
-            let sphere = Sphere { radius, center, material: MaterialEnum::Diffuse };
+            let sphere = Sphere { radius, center, material: MaterialEnum::Lambertian };
             world.objects.push(Box::new(sphere));
         }
         is_radius = !is_radius;

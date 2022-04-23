@@ -4,12 +4,12 @@ use crate::vector::Color;
 
 #[derive(Clone)]
 pub enum MaterialEnum {
-    Diffuse,
+    Lambertian,
 }
 
 impl Default for MaterialEnum {
     fn default() -> Self {
-        MaterialEnum::Diffuse
+        MaterialEnum::Lambertian
     }
 }
 
