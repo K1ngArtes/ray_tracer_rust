@@ -5,9 +5,9 @@ mod util;
 mod vector;
 
 use crate::hittable::{HittableList, Sphere};
+use material::MaterialEnum;
 use ray::Ray;
 use vector::{Color, Point3, Vec3};
-use material::MaterialEnum;
 
 use crate::ray::ray_color;
 use std::fs::File;
@@ -127,7 +127,13 @@ fn load_world_file() -> Result<HittableList, Error> {
                 point3_values[1].parse().unwrap(),
                 point3_values[2].parse().unwrap(),
             );
-            let sphere = Sphere { radius, center, material: MaterialEnum::Lambertian{ albedo: Color::default() } };
+            let sphere = Sphere {
+                radius,
+                center,
+                material: MaterialEnum::Lambertian {
+                    albedo: Color::default(),
+                },
+            };
             world.objects.push(Box::new(sphere));
         }
         is_radius = !is_radius;
