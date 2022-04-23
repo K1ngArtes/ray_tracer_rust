@@ -1,6 +1,6 @@
 use crate::material::MaterialEnum;
 use crate::ray::Ray;
-use crate::vector::{Point3, Vec3};
+use crate::vector::{Point3, Vec3, Color};
 
 #[derive(Default, Clone)]
 pub struct HitRecord {
@@ -26,7 +26,7 @@ impl Default for Sphere {
         Sphere {
             center: Vec3{x: 0.0, y: 0.0, z: -1.0},
             radius: 0.5,
-            material: MaterialEnum::Lambertian,
+            material: MaterialEnum::Lambertian{albedo: Color::default()},
         }
     }
 }

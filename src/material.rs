@@ -1,26 +1,28 @@
 use crate::hittable::HitRecord;
 use crate::ray::Ray;
-use crate::vector::Color;
+use crate::vector::{Color, Vec3};
 
 #[derive(Clone)]
 pub enum MaterialEnum {
-    Lambertian,
+    Lambertian{albedo: Color},
 }
 
 impl Default for MaterialEnum {
     fn default() -> Self {
-        MaterialEnum::Lambertian
+        MaterialEnum::Lambertian{albedo: Color::default()}
     }
 }
 
 impl MaterialEnum {
-    pub fn scatter(
-        &self,
-        _r_in: &Ray,
-        _hit_record: &HitRecord,
-        _attenuation: &Color,
-        _scattered: &Ray,
-    ) -> bool {
-        todo!()
+    pub fn scatter(&self, _r_in: &Ray, hit_record: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
+        match self {
+            MaterialEnum::Lambertian { albedo: albedoVal } => {
+                let scatter_direction = hit_record.normal + Vec3::random_unit_vector();
+                *scattered = Ray::new(hit_record.p, scatter_direction);
+                *attenuation = *albedoVal;
+                true
+            }
+        }
     }
 }
+
