@@ -130,8 +130,8 @@ fn load_world_file() -> Result<HittableList, Error> {
             let sphere = Sphere {
                 radius,
                 center,
-                material: MaterialEnum::Lambertian {
-                    albedo: Color::default(),
+                material: MaterialEnum::Metal {
+                    albedo: Color::new(0.8, 0.8, 0.0),
                 },
             };
             world.objects.push(Box::new(sphere));

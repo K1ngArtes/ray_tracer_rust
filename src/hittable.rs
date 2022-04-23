@@ -62,6 +62,7 @@ impl Hittable for Sphere {
         hit_record.p = ray.at(hit_record.t);
         let outward_normal_unit = (hit_record.p - self.center) / self.radius;
         hit_record.set_face_normal(ray, &outward_normal_unit);
+        hit_record.material = self.material;
 
         true
     }

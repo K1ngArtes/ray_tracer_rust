@@ -2,9 +2,10 @@ use crate::hittable::HitRecord;
 use crate::ray::Ray;
 use crate::vector::{Color, Vec3};
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub enum MaterialEnum {
     Lambertian { albedo: Color },
+    Metal { albedo: Color },
 }
 
 impl Default for MaterialEnum {
@@ -18,7 +19,7 @@ impl Default for MaterialEnum {
 impl MaterialEnum {
     pub fn scatter(
         &self,
-        _r_in: &Ray,
+        r_in: &Ray,
         hit_record: &HitRecord,
         attenuation: &mut Color,
         scattered: &mut Ray,
@@ -35,6 +36,13 @@ impl MaterialEnum {
                 *scattered = Ray::new(hit_record.p, scatter_direction);
                 *attenuation = *albedoVal;
                 true
+            }
+            MaterialEnum::Metal { albedo: albedoVal } => {
+                let reflected = Vec3::reflect(r_in.dir.unit_vector(), hit_record.normal);
+                *scattered = Ray::new(hit_record.p, reflected);
+                *attenuation = *albedoVal;
+
+                return scattered.dir.dot(hit_record.normal) > 0.0;
             }
         }
     }

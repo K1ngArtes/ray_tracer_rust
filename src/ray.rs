@@ -1,4 +1,5 @@
 use crate::hittable::{HitRecord, Hittable, HittableList};
+use crate::material::MaterialEnum;
 use crate::util;
 use crate::vector::{Color, Point3, Vec3};
 
@@ -24,13 +25,15 @@ pub fn ray_color(ray: Ray, world: &HittableList, depth: i32) -> Color {
 
     let mut hit_record: HitRecord = HitRecord::default();
     if world.hit(&ray, 0.001, util::INFINITY, &mut hit_record) {
-        let target = hit_record.p + hit_record.normal + Vec3::random_unit_vector();
-        return 0.5
-            * ray_color(
-                Ray::new(hit_record.p, target - hit_record.p),
-                world,
-                depth - 1,
-            );
+        let mut scattered = Ray::new(Point3::default(), Vec3::default());
+        let mut attenuation: Color = Color::default();
+        if hit_record
+            .material
+            .scatter(&ray, &hit_record, &mut attenuation, &mut scattered)
+        {
+            return attenuation * ray_color(scattered, world, depth - 1);
+        }
+        return Color::default();
     }
 
     let unit_direction = ray.dir.unit_vector();
