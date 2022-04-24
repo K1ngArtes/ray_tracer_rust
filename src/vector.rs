@@ -327,3 +327,22 @@ fn vec3_cross_test() {
         v3
     );
 }
+
+#[test]
+fn vec3_mul_test() {
+    let v1 = Vec3 {
+        x: 1.0,
+        y: 2.0,
+        z: 3.0,
+    };
+    let v2 = Vec3 {
+        x: 4.0,
+        y: 5.0,
+        z: 6.0,
+    };
+
+    let mul_result = v1 * v2;
+
+    assert_eq!(v2*v1, mul_result);
+    assert_eq!(Vec3{x: 4.0, y: 10.0, z: 18.0}, mul_result);
+}

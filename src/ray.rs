@@ -20,7 +20,7 @@ impl Ray {
 
 pub fn ray_color(ray: Ray, world: &HittableList, depth: i32) -> Color {
     if depth <= 0 {
-        return Color::default();
+        return Color::new(0.0, 0.0, 0.0);
     }
 
     let mut hit_record: HitRecord = HitRecord::default();
@@ -33,7 +33,7 @@ pub fn ray_color(ray: Ray, world: &HittableList, depth: i32) -> Color {
         {
             return attenuation * ray_color(scattered, world, depth - 1);
         }
-        return Color::default();
+        return Color::new(0.0, 0.0, 0.0);
     }
 
     let unit_direction = ray.dir.unit_vector();
