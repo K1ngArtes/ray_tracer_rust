@@ -212,7 +212,6 @@ fn parse_radius(line: &String) -> f64 {
     return line.parse().unwrap();
 }
 
-
 #[bench]
 fn main_bench(b: &mut Bencher) {
     b.iter(|| main())
