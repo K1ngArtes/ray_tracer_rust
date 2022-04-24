@@ -116,18 +116,23 @@ fn load_world_file() -> Result<HittableList, Error> {
     };
     let mut radius = 0.0;
     let mut center = Vec3::default();
+    let mut material_num: i32 = -1;
     let mut material: MaterialEnum;
     for (i, line) in buffered.lines().enumerate().map(|(i, l)| (i, l.unwrap())) {
         // Radius
         // Center
-        // Material
-        match i % 3 {
+        // Material num
+        // Material albedo color
+        match i % 5 {
             0 => radius = parse_radius(&line),
             1 => {
                 center = parse_center(&line);
             }
             2 => {
-                material = parse_material(line);
+                material_num = parse_material_num(&line);
+            }
+            3 => {
+                material = parse_material(&line, material_num);
                 let sphere = Sphere {
                     radius,
                     center,
@@ -135,6 +140,7 @@ fn load_world_file() -> Result<HittableList, Error> {
                 };
                 world.objects.push(Box::new(sphere));
             }
+            4 => continue,
             _ => {
                 panic!("Should not get here")
             }
@@ -144,17 +150,20 @@ fn load_world_file() -> Result<HittableList, Error> {
     Ok(world)
 }
 
-fn parse_material(line: String) -> MaterialEnum {
-    let material_num = line.parse().unwrap();
+fn parse_material_num(line: &String) -> i32 {
+    line.parse().unwrap()
+}
+
+fn parse_material(line: &String, material_num: i32) -> MaterialEnum {
     match material_num {
         1 => {
             return MaterialEnum::Lambertian {
-                albedo: Color::new(0.8, 0.8, 0.0),
+                albedo: parse_color(line),
             }
         }
         2 => {
             return MaterialEnum::Metal {
-                albedo: Color::new(0.7, 0.3, 0.3),
+                albedo: parse_color(line),
             }
         }
         _ => {
@@ -169,6 +178,15 @@ fn parse_center(line: &String) -> Point3 {
         point3_values[0].parse().unwrap(),
         point3_values[1].parse().unwrap(),
         point3_values[2].parse().unwrap(),
+    );
+}
+
+fn parse_color(line: &String) -> Color {
+    let color_values: Vec<&str> = line.split(' ').to_owned().collect();
+    return Color::new(
+        color_values[0].parse().unwrap(),
+        color_values[1].parse().unwrap(),
+        color_values[2].parse().unwrap(),
     );
 }
 
