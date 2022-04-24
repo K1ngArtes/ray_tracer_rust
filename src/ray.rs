@@ -1,5 +1,4 @@
 use crate::hittable::{HitRecord, Hittable, HittableList};
-use crate::material::MaterialEnum;
 use crate::util;
 use crate::vector::{Color, Point3, Vec3};
 

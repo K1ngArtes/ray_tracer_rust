@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use rand::Rng;
 
 pub static INFINITY: f64 = f64::INFINITY;

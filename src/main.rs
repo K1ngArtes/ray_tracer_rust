@@ -16,7 +16,7 @@ use vector::{Color, Point3, Vec3};
 use crate::ray::ray_color;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
-use test::Bencher;
+use std::time::Instant;
 
 static SAMPLES_PER_PIXEL: i32 = 10;
 static MAX_DEPTH: i32 = 50;
@@ -35,6 +35,7 @@ fn main() {
     println!("{} {}", image_width, image_height);
     println!("255");
 
+    let start = Instant::now();
     // Pixels are written from left to right, top to bottom
     let mut row = image_height - 1;
     while row >= 0 {
@@ -51,8 +52,10 @@ fn main() {
             write_color(pixel_color, SAMPLES_PER_PIXEL);
         }
         row -= 1;
-        // eprintln!("Done");
     }
+
+    let duration = start.elapsed();
+    eprintln!("Time elapsed is: {:?}", duration);
 }
 
 fn write_color(pixel_color: Color, samples_per_pixel: i32) {
@@ -210,9 +213,4 @@ fn parse_color_with_fuzziness(line: &String) -> (Color, f64) {
 
 fn parse_radius(line: &String) -> f64 {
     return line.parse().unwrap();
-}
-
-#[bench]
-fn main_bench(b: &mut Bencher) {
-    b.iter(|| main())
 }
