@@ -1,8 +1,12 @@
+#![feature(test)]
+
 mod hittable;
 mod material;
 mod ray;
 mod util;
 mod vector;
+
+extern crate test;
 
 use crate::hittable::{HittableList, Sphere};
 use material::MaterialEnum;
@@ -12,6 +16,7 @@ use vector::{Color, Point3, Vec3};
 use crate::ray::ray_color;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
+use test::Bencher;
 
 static SAMPLES_PER_PIXEL: i32 = 10;
 static MAX_DEPTH: i32 = 50;
@@ -205,4 +210,10 @@ fn parse_color_with_fuzziness(line: &String) -> (Color, f64) {
 
 fn parse_radius(line: &String) -> f64 {
     return line.parse().unwrap();
+}
+
+
+#[bench]
+fn main_bench(b: &mut Bencher) {
+    b.iter(|| main())
 }

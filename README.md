@@ -16,3 +16,11 @@ Run the project using cargo
 cargo run
 ```
 Inspect the resulting image in `out/image.ppm`
+
+Benchmarking requires a [nightly build](https://doc.rust-lang.org/book/appendix-07-nightly-rust.html) which can be installed using the following commands
+```shell
+rustup toolchain install nightly
+rustup toolchain list
+rustup override set nightly
+cargo bench
+```
