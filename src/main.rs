@@ -164,6 +164,7 @@ fn parse_material(line: &String, material_num: i32) -> MaterialEnum {
         2 => {
             return MaterialEnum::Metal {
                 albedo: parse_color(line),
+                fuzziness: 0.3,
             }
         }
         _ => {
