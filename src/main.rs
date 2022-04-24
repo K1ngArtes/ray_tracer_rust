@@ -114,30 +114,64 @@ fn load_world_file() -> Result<HittableList, Error> {
     let mut world = HittableList {
         objects: Vec::new(),
     };
-    let mut is_radius = true;
     let mut radius = 0.0;
-    for line in buffered.lines() {
-        if is_radius {
-            radius = line?.parse().unwrap();
-        } else {
-            let the_line = line?;
-            let point3_values: Vec<&str> = the_line.split(' ').to_owned().collect();
-            let center = Point3::new(
-                point3_values[0].parse().unwrap(),
-                point3_values[1].parse().unwrap(),
-                point3_values[2].parse().unwrap(),
-            );
-            let sphere = Sphere {
-                radius,
-                center,
-                material: MaterialEnum::Metal {
-                    albedo: Color::new(0.8, 0.8, 0.0),
-                },
-            };
-            world.objects.push(Box::new(sphere));
+    let mut center = Vec3::default();
+    let mut material: MaterialEnum;
+    for (i, line) in buffered.lines().enumerate().map(|(i, l)| (i, l.unwrap())) {
+        // Radius
+        // Center
+        // Material
+        match i % 3 {
+            0 => radius = parse_radius(&line),
+            1 => {
+                center = parse_center(&line);
+            }
+            2 => {
+                material = parse_material(line);
+                let sphere = Sphere {
+                    radius,
+                    center,
+                    material,
+                };
+                world.objects.push(Box::new(sphere));
+            }
+            _ => {
+                panic!("Should not get here")
+            }
         }
-        is_radius = !is_radius;
     }
 
     Ok(world)
+}
+
+fn parse_material(line: String) -> MaterialEnum {
+    let material_num = line.parse().unwrap();
+    match material_num {
+        1 => {
+            return MaterialEnum::Lambertian {
+                albedo: Color::new(0.8, 0.8, 0.0),
+            }
+        }
+        2 => {
+            return MaterialEnum::Metal {
+                albedo: Color::new(0.7, 0.3, 0.3),
+            }
+        }
+        _ => {
+            panic!("Should not get here")
+        }
+    }
+}
+
+fn parse_center(line: &String) -> Point3 {
+    let point3_values: Vec<&str> = line.split(' ').to_owned().collect();
+    return Point3::new(
+        point3_values[0].parse().unwrap(),
+        point3_values[1].parse().unwrap(),
+        point3_values[2].parse().unwrap(),
+    );
+}
+
+fn parse_radius(line: &String) -> f64 {
+    return line.parse().unwrap();
 }

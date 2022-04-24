@@ -343,6 +343,13 @@ fn vec3_mul_test() {
 
     let mul_result = v1 * v2;
 
-    assert_eq!(v2*v1, mul_result);
-    assert_eq!(Vec3{x: 4.0, y: 10.0, z: 18.0}, mul_result);
+    assert_eq!(v2 * v1, mul_result);
+    assert_eq!(
+        Vec3 {
+            x: 4.0,
+            y: 10.0,
+            z: 18.0
+        },
+        mul_result
+    );
 }
