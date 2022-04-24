@@ -162,10 +162,8 @@ fn parse_material(line: &String, material_num: i32) -> MaterialEnum {
             }
         }
         2 => {
-            return MaterialEnum::Metal {
-                albedo: parse_color(line),
-                fuzziness: 0.3,
-            }
+            let (albedo, fuzziness) = parse_color_with_fuzziness(line);
+            return MaterialEnum::Metal { albedo, fuzziness };
         }
         _ => {
             panic!("Should not get here")
@@ -188,6 +186,20 @@ fn parse_color(line: &String) -> Color {
         color_values[0].parse().unwrap(),
         color_values[1].parse().unwrap(),
         color_values[2].parse().unwrap(),
+    );
+}
+
+fn parse_color_with_fuzziness(line: &String) -> (Color, f64) {
+    let color_values: Vec<&str> = line.split(' ').to_owned().collect();
+    let fuzzy = color_values[3].parse().unwrap();
+    assert!(fuzzy >= 0.0 && fuzzy <= 1.0);
+    return (
+        Color::new(
+            color_values[0].parse().unwrap(),
+            color_values[1].parse().unwrap(),
+            color_values[2].parse().unwrap(),
+        ),
+        fuzzy,
     );
 }
 
