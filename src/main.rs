@@ -1,5 +1,3 @@
-#![feature(test)]
-
 mod hittable;
 mod material;
 mod ray;
