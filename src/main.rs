@@ -4,8 +4,6 @@ mod ray;
 mod util;
 mod vector;
 
-extern crate test;
-
 use crate::hittable::{HittableList, Sphere};
 use material::MaterialEnum;
 use ray::Ray;
