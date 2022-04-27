@@ -34,3 +34,6 @@ rustup toolchain list
 rustup override set nightly
 cargo bench
 ```
+
+## Example render
+![Alt text](example_images/example_image.png?raw=true "Title")
