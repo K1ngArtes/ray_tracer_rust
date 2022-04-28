@@ -60,9 +60,19 @@ impl MaterialEnum {
                 }
 
                 let unit_direction = r_in.dir.unit_vector();
-                let refracted = Vec3::refract(unit_direction, hit_record.normal, refraction_ratio);
+                let cos_theta = -unit_direction.dot(hit_record.normal).min(1.0);
+                let sin_theta = (1.0 - cos_theta*cos_theta).sqrt();
 
-                *scattered = Ray::new(hit_record.p, refracted);
+                let cannot_refract = (refraction_ratio * sin_theta) > 1.0;
+
+                let direction;
+                if cannot_refract {
+                    direction = Vec3::reflect(unit_direction, hit_record.normal);
+                } else {
+                    direction = Vec3::refract(unit_direction, hit_record.normal, refraction_ratio);
+                }
+
+                *scattered = Ray::new(hit_record.p, direction);
                 return true;
             }
         }
