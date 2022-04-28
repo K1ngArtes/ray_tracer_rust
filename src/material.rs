@@ -52,7 +52,7 @@ impl MaterialEnum {
                 index_of_refraction: index_of_ref,
             } => {
                 *attenuation = Color::new(1.0, 1.0, 1.0);
-                let mut refraction_ratio = 0.0;
+                let refraction_ratio;
                 if hit_record.is_front_face {
                     refraction_ratio = 1.0 / index_of_ref;
                 } else {

@@ -77,7 +77,7 @@ impl Vec3 {
     }
 
     pub fn refract(uv: Vec3, n: Vec3, etai_over_etat: f64) -> Vec3 {
-        let mut cos_theta = 0.0;
+        let cos_theta;
         if -uv.dot(n) > 1.0 {
             cos_theta = 1.0;
         } else {
