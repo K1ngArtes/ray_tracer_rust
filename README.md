@@ -37,3 +37,4 @@ cargo bench
 
 ## Example render
 ![Alt text](example_images/example_image.png?raw=true "Title")
+![Alt text](example_images/glass_diffuse_metal.png?raw=true "Glass, diffuse and metal spheres")
