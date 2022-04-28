@@ -6,6 +6,7 @@ use crate::vector::{Color, Vec3};
 pub enum MaterialEnum {
     Lambertian { albedo: Color },
     Metal { albedo: Color, fuzziness: f64 },
+    Dielectric { index_of_refraction: f64 },
 }
 
 impl Default for MaterialEnum {
@@ -46,6 +47,23 @@ impl MaterialEnum {
                 *attenuation = *albedo_val;
 
                 return scattered.dir.dot(hit_record.normal) > 0.0;
+            }
+            MaterialEnum::Dielectric {
+                index_of_refraction: index_of_ref,
+            } => {
+                *attenuation = Color::new(1.0, 1.0, 1.0);
+                let mut refraction_ratio = 0.0;
+                if hit_record.is_front_face {
+                    refraction_ratio = 1.0 / index_of_ref;
+                } else {
+                    refraction_ratio = *index_of_ref;
+                }
+
+                let unit_direction = r_in.dir.unit_vector();
+                let refracted = Vec3::refract(unit_direction, hit_record.normal, refraction_ratio);
+
+                *scattered = Ray::new(hit_record.p, refracted);
+                return true;
             }
         }
     }

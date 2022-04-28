@@ -169,6 +169,12 @@ fn parse_material(line: &String, material_num: i32) -> MaterialEnum {
             let (albedo, fuzziness) = parse_color_with_fuzziness(line);
             return MaterialEnum::Metal { albedo, fuzziness };
         }
+        3 => {
+            let index_of_refraction = parse_index_of_refraction(line);
+            return MaterialEnum::Dielectric {
+                index_of_refraction,
+            };
+        }
         _ => {
             panic!("Should not get here")
         }
@@ -208,5 +214,9 @@ fn parse_color_with_fuzziness(line: &String) -> (Color, f64) {
 }
 
 fn parse_radius(line: &String) -> f64 {
+    return line.parse().unwrap();
+}
+
+fn parse_index_of_refraction(line: &String) -> f64 {
     return line.parse().unwrap();
 }

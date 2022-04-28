@@ -75,6 +75,18 @@ impl Vec3 {
     pub fn random_unit_vector() -> Vec3 {
         return Vec3::random_in_unit_sphere().unit_vector();
     }
+
+    pub fn refract(uv: Vec3, n: Vec3, etai_over_etat: f64) -> Vec3 {
+        let mut cos_theta = 0.0;
+        if -uv.dot(n) > 1.0 {
+            cos_theta = 1.0;
+        } else {
+            cos_theta = -uv.dot(n);
+        }
+        let r_out_perp: Vec3 = etai_over_etat * (uv + n * cos_theta);
+        let r_out_parallel: Vec3 = -f64::sqrt((1.0 - r_out_perp.length_squared()).abs()) * n;
+        return r_out_perp + r_out_parallel;
+    }
 }
 
 pub type Point3 = Vec3;
