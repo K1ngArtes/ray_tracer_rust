@@ -1,6 +1,7 @@
 use crate::hittable::HitRecord;
 use crate::ray::Ray;
 use crate::vector::{Color, Vec3};
+use crate::util::random_double;
 
 #[derive(Clone, Copy)]
 pub enum MaterialEnum {
@@ -66,7 +67,7 @@ impl MaterialEnum {
                 let cannot_refract = (refraction_ratio * sin_theta) > 1.0;
 
                 let direction;
-                if cannot_refract {
+                if cannot_refract || self.reflectance(cos_theta, refraction_ratio) > random_double() {
                     direction = Vec3::reflect(unit_direction, hit_record.normal);
                 } else {
                     direction = Vec3::refract(unit_direction, hit_record.normal, refraction_ratio);
@@ -74,6 +75,22 @@ impl MaterialEnum {
 
                 *scattered = Ray::new(hit_record.p, direction);
                 return true;
+            }
+        }
+    }
+
+    pub fn reflectance(&self, cosine: f64, ref_idx: f64) -> f64 {
+        match self {
+            MaterialEnum::Dielectric {
+                index_of_refraction: _index_of_ref,
+            } => {
+                // Use Schlick's approximation for reflectance.
+                let mut r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+                r0 = r0*r0;
+                return r0 + (1.0-r0) * (1.0-cosine).powi(5);
+            }
+            _ => {
+                return 0.0;
             }
         }
     }
