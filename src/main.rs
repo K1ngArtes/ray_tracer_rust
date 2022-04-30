@@ -92,7 +92,7 @@ fn load_world_file() -> Result<HittableList, Error> {
         // Radius
         // Center
         // Material num
-        // Material albedo color
+        // Material albedo color (or a special param)
         match i % 5 {
             0 => continue,
             1 => radius = parse_radius(&line),
