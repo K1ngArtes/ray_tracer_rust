@@ -88,19 +88,21 @@ fn load_world_file() -> Result<HittableList, Error> {
     let mut material_num: i32 = -1;
     let mut material: MaterialEnum;
     for (i, line) in buffered.lines().enumerate().map(|(i, l)| (i, l.unwrap())) {
+        // Comment
         // Radius
         // Center
         // Material num
         // Material albedo color
         match i % 5 {
-            0 => radius = parse_radius(&line),
-            1 => {
+            0 => continue,
+            1 => radius = parse_radius(&line),
+            2 => {
                 center = parse_center(&line);
             }
-            2 => {
+            3 => {
                 material_num = parse_material_num(&line);
             }
-            3 => {
+            4 => {
                 material = parse_material(&line, material_num);
                 let sphere = Sphere {
                     radius,
@@ -109,7 +111,6 @@ fn load_world_file() -> Result<HittableList, Error> {
                 };
                 world.objects.push(Box::new(sphere));
             }
-            4 => continue,
             _ => {
                 panic!("Should not get here")
             }
