@@ -39,7 +39,9 @@ Example value: `0.8 0.6 0.2 0.0`
 
 ### Glass
 #### Index of refraction
-Glass doesn't have the albedo value
+Glass doesn't have the albedo value. Index of refraction for air is `1.0`, water `1.3` and diamond is `2.4`
+
+Example value: `1.5`
 
 ## Benchmarking
 Benchmarking requires a [nightly build](https://doc.rust-lang.org/book/appendix-07-nightly-rust.html) which can be installed 
