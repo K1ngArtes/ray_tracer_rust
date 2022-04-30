@@ -2,15 +2,24 @@
 Minimalist ray tracer based on [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
 
 ## How to run
+Run the project using cargo
+```shell
+cargo run > out/image.ppm
+```
+Inspect the resulting image in `out/image.ppm`
+
+## Configuration
 Modify file `world.txt` for the world definition. The file consists of a set of lines
 defining a set of spheres separated by the empty line. Each sphere entry consist of the following lines
+1. Comment
 1. Radius
-2. Center coordinate in the form (x, y, z)
-3. Enumeration of the object material
-4. Albedo color of the material in the range 0.0 <= x <= 1.0
+1. Center coordinate in the form (x, y, z)
+1. Enumeration of the object material
+1. Albedo color of the material in the range 0.0 <= x <= 1.0 + type specific param
 
 For example
 ```txt
+// Center sphere. Grey color
 0.5
 0.0 0.0 -1.0
 2
@@ -20,12 +29,19 @@ implies the sphere of radius `0.5`, centered at `0.0 0.0 -1.0`,
 material of type `metalic`, albedo of `256*rgb(0.8 0.8 0.8)` 
 and the fuzziness parameter of `0.3`
 
-Run the project using cargo
-```shell
-cargo run > out/image.ppm
-```
-Inspect the resulting image in `out/image.ppm`
+## Material specific parameters
+### Metal
+#### Fuzziness
+Defines how frizzy/vague the reflections would be. The higher the fuzziness, the less vague the 
+reflection would be. Ranges from 0.0 (no fuzziness, perfect mirror) to 1.0
 
+Example value: `0.8 0.6 0.2 0.0`
+
+### Glass
+#### Index of refraction
+Glass doesn't have the albedo value
+
+## Benchmarking
 Benchmarking requires a [nightly build](https://doc.rust-lang.org/book/appendix-07-nightly-rust.html) which can be installed 
 and ran using the following commands
 ```shell
