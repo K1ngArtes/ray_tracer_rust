@@ -34,9 +34,9 @@ fn main() {
         lookfrom,
         lookat,
         Vec3::new(0.0, 1.0, 0.0),
-        20.0,
+        40.0,
         aspect_ratio,
-        2.0,
+        0.1,
         dist_to_focus,
     );
 
