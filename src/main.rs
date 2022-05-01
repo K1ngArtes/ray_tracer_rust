@@ -10,7 +10,6 @@ use material::MaterialEnum;
 use vector::{Color, Point3, Vec3};
 
 use crate::ray::ray_color;
-use crate::util::PI;
 use camera::Camera;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
@@ -20,34 +19,21 @@ static SAMPLES_PER_PIXEL: i32 = 10;
 static MAX_DEPTH: i32 = 50;
 
 fn main() {
-    let r = f64::cos(PI / 4.0);
     // World
-    // let world: HittableList = load_world_file().unwrap();
-    let sphere1 = Sphere {
-        radius: r,
-        center: Point3::new(-r, 0.0, -1.0),
-        material: MaterialEnum::Lambertian {
-            albedo: Color::new(0.0, 0.0, 1.0),
-        },
-    };
-    let sphere2 = Sphere {
-        radius: r,
-        center: Point3::new(r, 0.0, -1.0),
-        material: MaterialEnum::Lambertian {
-            albedo: Color::new(1.0, 0.0, 0.0),
-        },
-    };
-
-    let world = HittableList {
-        objects: vec![Box::new(sphere1), Box::new(sphere2)],
-    };
+    let world: HittableList = load_world_file().unwrap();
 
     // Image
     let aspect_ratio = 16.0 / 9.0;
     let image_width = 800;
     let image_height = (image_width as f64 / aspect_ratio) as i32;
 
-    let camera = Camera::new(90.0, aspect_ratio);
+    let camera = Camera::new(
+        Point3::new(-2.0, 2.0, 1.0),
+        Point3::new(0.0, 0.0, -1.0),
+        Vec3::new(0.0, 1.0, 0.0),
+        90.0,
+        aspect_ratio,
+    );
 
     println!("P3");
     println!("{} {}", image_width, image_height);
