@@ -82,6 +82,20 @@ impl Vec3 {
         let r_out_parallel: Vec3 = -f64::sqrt((1.0 - r_out_perp.length_squared()).abs()) * n;
         return r_out_perp + r_out_parallel;
     }
+
+    pub fn random_in_unit_disk() -> Vec3 {
+        loop {
+            let p = Vec3::new(
+                util::random_double_rng(-1.0, 1.0),
+                util::random_double_rng(-1.0, 1.0),
+                0.0,
+            );
+            if p.length_squared() >= 1.0 {
+                continue;
+            }
+            return p;
+        }
+    }
 }
 
 pub type Point3 = Vec3;
