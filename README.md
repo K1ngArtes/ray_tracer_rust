@@ -8,6 +8,11 @@ cargo run > out/image.ppm
 ```
 Inspect the resulting image in `out/image.ppm`
 
+Add flag `random` to generate random scene
+```shell
+cargo run > out/image.ppm random
+```
+
 ## Configuration
 Modify file `world.txt` for the world definition. The file consists of a set of lines
 defining a set of spheres separated by the empty line. Each sphere entry consist of the following lines

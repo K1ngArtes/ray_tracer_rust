@@ -16,14 +16,20 @@ use std::io::{BufRead, BufReader, Error};
 use std::time::Instant;
 use crate::util::{random_double, random_double_rng};
 use std::ops::Div;
+use std::env;
 
 static SAMPLES_PER_PIXEL: i32 = 10;
 static MAX_DEPTH: i32 = 50;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
     // World
-    // let world: HittableList = load_world_file().unwrap();
-    let world: HittableList = random_scene();
+    let world: HittableList;
+    if &args[1] == "random" {
+        world = random_scene();
+    } else {
+        world = load_world_file().unwrap();
+    }
 
     // Image
     let aspect_ratio = 3.0 / 2.0;
@@ -67,7 +73,7 @@ fn main() {
     }
 
     let duration = start.elapsed().div(60);
-    eprintln!("Time elapsed is: {:?} minutes", duration);
+    eprintln!("Time elapsed is: {:.2?} minutes", duration);
 }
 
 fn write_color(pixel_color: Color, samples_per_pixel: i32) {
