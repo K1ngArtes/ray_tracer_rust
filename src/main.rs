@@ -10,13 +10,13 @@ use material::MaterialEnum;
 use vector::{Color, Point3, Vec3};
 
 use crate::ray::ray_color;
+use crate::util::{random_double, random_double_rng};
 use camera::Camera;
+use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
-use std::time::Instant;
-use crate::util::{random_double, random_double_rng};
 use std::ops::Div;
-use std::env;
+use std::time::Instant;
 
 static SAMPLES_PER_PIXEL: i32 = 10;
 static MAX_DEPTH: i32 = 50;
@@ -209,13 +209,13 @@ fn parse_index_of_refraction(line: &String) -> f64 {
 }
 
 fn random_scene() -> HittableList {
-    let mut world = HittableList{ objects: vec![] };
+    let mut world = HittableList { objects: vec![] };
 
     let ground_color = MaterialEnum::Lambertian {
-        albedo: Color::new(0.5, 0.5, 0.5)
+        albedo: Color::new(0.5, 0.5, 0.5),
     };
 
-    let ground_sphere = Sphere{
+    let ground_sphere = Sphere {
         center: Point3::new(0.0, -1000.0, 0.0),
         radius: 1000.0,
         material: ground_color,
@@ -228,9 +228,9 @@ fn random_scene() -> HittableList {
             let a = a as f64;
             let b = b as f64;
             let choose_mat = random_double();
-            let center = Point3::new(a+0.9*random_double(), 0.2, b+0.9*random_double());
+            let center = Point3::new(a + 0.9 * random_double(), 0.2, b + 0.9 * random_double());
 
-            if (center-Point3::new(4.0, 0.2, 0.0)).length() > 0.9 {
+            if (center - Point3::new(4.0, 0.2, 0.0)).length() > 0.9 {
                 if choose_mat < 0.8 {
                     // diffuse
                     let sphere_material = MaterialEnum::Lambertian {
@@ -239,7 +239,7 @@ fn random_scene() -> HittableList {
                     world.objects.push(Box::new(Sphere {
                         center,
                         radius: 0.2,
-                        material: sphere_material
+                        material: sphere_material,
                     }));
                 } else if choose_mat < 0.95 {
                     // metal
@@ -252,7 +252,7 @@ fn random_scene() -> HittableList {
                     world.objects.push(Box::new(Sphere {
                         center,
                         radius: 0.2,
-                        material: sphere_material
+                        material: sphere_material,
                     }));
                 } else {
                     // glass
@@ -262,13 +262,15 @@ fn random_scene() -> HittableList {
                     world.objects.push(Box::new(Sphere {
                         center,
                         radius: 0.2,
-                        material: sphere_material
+                        material: sphere_material,
                     }));
                 }
             }
         }
 
-        let material1 = MaterialEnum::Dielectric { index_of_refraction: 1.5 };
+        let material1 = MaterialEnum::Dielectric {
+            index_of_refraction: 1.5,
+        };
         world.objects.push(Box::new(Sphere {
             center: Point3::new(0.0, 1.0, 0.0),
             radius: 1.0,
