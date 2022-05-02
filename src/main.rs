@@ -14,22 +14,25 @@ use camera::Camera;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 use std::time::Instant;
+use crate::util::{random_double, random_double_rng};
+use std::ops::Div;
 
 static SAMPLES_PER_PIXEL: i32 = 10;
 static MAX_DEPTH: i32 = 50;
 
 fn main() {
     // World
-    let world: HittableList = load_world_file().unwrap();
+    // let world: HittableList = load_world_file().unwrap();
+    let world: HittableList = random_scene();
 
     // Image
-    let aspect_ratio = 16.0 / 9.0;
-    let image_width = 800;
+    let aspect_ratio = 3.0 / 2.0;
+    let image_width = 1200;
     let image_height = (image_width as f64 / aspect_ratio) as i32;
 
-    let lookfrom = Point3::new(3.0, 3.0, 2.0);
-    let lookat = Point3::new(0.0, 0.0, -1.0);
-    let dist_to_focus = (lookfrom - lookat).length();
+    let lookfrom = Point3::new(13.0, 2.0, 3.0);
+    let lookat = Point3::new(0.0, 0.0, 0.0);
+    let dist_to_focus = 10.0;
     let camera = Camera::new(
         lookfrom,
         lookat,
@@ -63,8 +66,8 @@ fn main() {
         row -= 1;
     }
 
-    let duration = start.elapsed();
-    eprintln!("Time elapsed is: {:?}", duration);
+    let duration = start.elapsed().div(60);
+    eprintln!("Time elapsed is: {:?} minutes", duration);
 }
 
 fn write_color(pixel_color: Color, samples_per_pixel: i32) {
@@ -197,4 +200,94 @@ fn parse_radius(line: &String) -> f64 {
 
 fn parse_index_of_refraction(line: &String) -> f64 {
     return line.parse().unwrap();
+}
+
+fn random_scene() -> HittableList {
+    let mut world = HittableList{ objects: vec![] };
+
+    let ground_color = MaterialEnum::Lambertian {
+        albedo: Color::new(0.5, 0.5, 0.5)
+    };
+
+    let ground_sphere = Sphere{
+        center: Point3::new(0.0, -1000.0, 0.0),
+        radius: 1000.0,
+        material: ground_color,
+    };
+
+    world.objects.push(Box::new(ground_sphere));
+
+    for a in -11..11 {
+        for b in -11..11 {
+            let a = a as f64;
+            let b = b as f64;
+            let choose_mat = random_double();
+            let center = Point3::new(a+0.9*random_double(), 0.2, b+0.9*random_double());
+
+            if (center-Point3::new(4.0, 0.2, 0.0)).length() > 0.9 {
+                if choose_mat < 0.8 {
+                    // diffuse
+                    let sphere_material = MaterialEnum::Lambertian {
+                        albedo: Color::random() * Color::random(),
+                    };
+                    world.objects.push(Box::new(Sphere {
+                        center,
+                        radius: 0.2,
+                        material: sphere_material
+                    }));
+                } else if choose_mat < 0.95 {
+                    // metal
+                    let albedo = Color::random_with_limit(0.5, 1.0);
+                    let fuzz = random_double_rng(0.0, 0.5);
+                    let sphere_material = MaterialEnum::Metal {
+                        albedo,
+                        fuzziness: fuzz,
+                    };
+                    world.objects.push(Box::new(Sphere {
+                        center,
+                        radius: 0.2,
+                        material: sphere_material
+                    }));
+                } else {
+                    // glass
+                    let sphere_material = MaterialEnum::Dielectric {
+                        index_of_refraction: 1.5,
+                    };
+                    world.objects.push(Box::new(Sphere {
+                        center,
+                        radius: 0.2,
+                        material: sphere_material
+                    }));
+                }
+            }
+        }
+
+        let material1 = MaterialEnum::Dielectric { index_of_refraction: 1.5 };
+        world.objects.push(Box::new(Sphere {
+            center: Point3::new(0.0, 1.0, 0.0),
+            radius: 1.0,
+            material: material1,
+        }));
+
+        let material2 = MaterialEnum::Lambertian {
+            albedo: Color::new(0.4, 0.2, 0.1),
+        };
+        world.objects.push(Box::new(Sphere {
+            center: Point3::new(-4.0, 1.0, 0.0),
+            radius: 1.0,
+            material: material2,
+        }));
+
+        let material3 = MaterialEnum::Metal {
+            albedo: Color::new(0.7, 0.6, 0.5),
+            fuzziness: 0.0,
+        };
+        world.objects.push(Box::new(Sphere {
+            center: Point3::new(4.0, 1.0, 0.0),
+            radius: 1.0,
+            material: material3,
+        }));
+    }
+
+    return world;
 }
