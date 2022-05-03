@@ -1,5 +1,6 @@
 # Ray Tracer Rust
 Minimalist ray tracer based on [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+![Alt text](example_images/final_scene.png?raw=true "Final scene using random world generator")
 
 ## How to run
 Run the project using cargo
